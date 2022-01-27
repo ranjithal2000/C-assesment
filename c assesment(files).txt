@@ -1,0 +1,169 @@
+1.Write a program in C to write multiple lines in a text file. 
+
+#include<stdio.h>
+int main()
+{
+FILE *fptr;
+int i,n;
+char str[100];
+printf("Enter the number of lines:");//specify the number of lines to be entered
+scanf("%d",&n);//2
+fptr=fopen("jkt.txt","w");//file name to which content needs to be entered (in write mode)
+for(i=0;i<n+1;i++)//0<3,1<3,2<3
+{
+    gets(str);//take the content
+    fputs(str,fptr);//print the content
+    fputs("\n",fptr);//next line
+}
+fclose(fptr);//close file
+}
+
+
+2.Write a program in C to count a number of words and characters in a file.
+
+#include<stdio.h>
+#include<stdlib.h>
+void main()
+{
+    FILE *fptr;
+    char ch;
+    char fname[20];
+    int word=0, character=0;
+    printf("enter the file name to open");//contents of that particular file will be considered
+    scanf("%s",fname);//ok.txt
+    fptr=fopen(fname,"r");//file will be opened in read mode
+    if(fptr==NULL)
+    {
+        printf("file does not exist");//if that particular file does not exist
+    }
+    else
+    {
+        ch=fgetc(fptr);//read character by character from the file
+        printf("\n the content of the file %s:",fname);//display the contents of file(how are you)
+        while(ch!=EOF)//till loop reaches end of file
+        {
+            printf("%c",ch);
+            if(ch==' ' || ch=='\t' || ch=='\n' || ch=='\0')
+            {
+                word++;//in case of gap or next line or null the count of word gets incremented
+            }
+            else //otherwise
+            {
+                character++;//count of character gets incremented
+            }
+            ch=fgetc(fptr);
+        }
+        printf("\n number of words in file %s are:%d",fname,word);//total number of words(3)
+        printf("\n number of character in file %s are:%d",fname,character);//total num of characters in ok.txt(9)
+    }
+    fclose(fptr);//close file
+}
+
+
+3.Write a program in C to merge two files and write it in a new file.
+
+#include<stdio.h>
+#include<stdlib.h>
+void main()
+{
+    FILE *fptr1, *fptr2, *fptr3;
+    char ch, fname1[20],fname2[20],fname3[20];
+    printf("enter the first file name:");
+    scanf("%s",fname1);//ok.txt
+    printf("enter the second file name:");
+    scanf("%s",fname2);//jkt.txt
+    printf("enter the third file name where we merge two files:");
+    scanf("%s",fname3);//hello.txt
+    fptr1=fopen(fname1,"r");//opens ok.txt in read mode
+    fptr2=fopen(fname2,"r");//opens jkt.txt in read mode
+    if(fptr1==NULL || fptr2==NULL)
+    {
+        printf("file does not exist \n");//if either of the files does not exist
+    }
+    fptr3=fopen(fname3,"w");//hello.txt is opened in write mode
+    if(fptr3==NULL)
+    {
+        printf("file does not exist: \n");//if hello.txt is not present
+    }
+    while((ch=fgetc(fptr1))!=EOF)//reads every character form ok.txt
+    {
+        putc(ch,fptr3);//contents will be copied to hello.txt
+    }
+     while((ch=fgetc(fptr2))!=EOF)//reads every character from jkt.txt
+    {
+        putc(ch,fptr3);//contents will be copied to hello.txt
+    }
+    printf("two files are merged successfully into %s",fname3);//contents of both the files are successfully copied to hello.txt
+    fclose(fptr1);
+    fclose(fptr2);
+    fclose(fptr3);//close all files
+}
+
+
+4.Write a program in C to remove a file from the disk.
+
+#include<stdio.h>
+void main()
+{
+    int a=remove("hey.txt");//enter the name of the file to be deleted
+    if(a==NULL)
+    {
+        printf("file is deleted");//after successful deletion
+    }
+    else
+    {
+        printf("file is not deleted");//if it does not delete
+    }
+}
+
+
+5.Write a program in C to create and store information in a text file(loops)
+
+#include<stdio.h>
+#include<stdlib.h>
+struct Emp
+{
+    int emp_id, age;//structure is created to store various data types
+    char name[50];
+};
+int main()
+{
+    int n;
+    struct Emp em;
+    FILE *fptr;
+    char Emp[50];
+    fptr=fopen("employee.txt","w");//opens the file named employee.txt
+    if(fptr==NULL)
+    {
+        printf("error opening the file");//if the file does not exist it'll print this message
+        exit(1);
+    }
+    for(n=0;n<2;n++)//iterate up to 5 employees
+    {
+        printf("enter name:\n");
+        scanf("%s",em.name);// name: Ranju
+        printf("enter employee id:\n");
+        scanf("%s",&em.emp_id);// emp_id:1
+        printf("enter age:\n");
+        scanf("%d",&em.age);// age:22
+        printf("\n");
+        fwrite(&em,sizeof(struct Emp),1,fptr);//writes the data specified to the file
+    }
+    fclose(fptr);//close thefile
+    fptr=fopen("employee.txt","r");//opens the file employee for read purpose
+    printf("print employee details:\n");
+    for(n=0;n<2;n++)//loop to print the employee details(upto 5 employees)
+    {
+        fread(&em,sizeof(struct Emp),1,fptr);
+        printf("name:%s\n",em.name);//Ranju
+        printf("employee_id:%d\n",em.emp_id);//1
+        printf("age:%d\n",em.age);//22
+    }
+    printf("\n end of file \n");//when it comes out of loop it'll print end of file
+    fclose(fptr);//close file
+    return 0;
+}
+
+
+
+
